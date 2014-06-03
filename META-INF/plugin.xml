@@ -1,0 +1,44 @@
+<idea-plugin version="2">
+  <id>pl.statedebug</id>
+  <name>StateToCodePlugin</name>
+  <version>1.0</version>
+  <vendor email="office@letuscode.it" url="http://www.letuscode.it">LetUsCode.it</vendor>
+
+  <description><![CDATA[
+      Simple plugin to save objects state as java code while debugging
+    ]]></description>
+
+  <change-notes><![CDATA[
+      1.0 first version
+    ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+      <action id="StateToCodeAction" class="pl.statedebug.StateToCodeAction" text="SaveAsCode" description="save as java code">
+          <add-to-group group-id="Debugger.FramePanelPopup" anchor="last"/>
+      </action>
+  </actions>
+
+</idea-plugin>
