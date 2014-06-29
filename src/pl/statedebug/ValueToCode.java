@@ -3,9 +3,7 @@ package pl.statedebug;
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import com.sun.jdi.Field;
-import com.sun.jdi.Value;
-import com.sun.tools.jdi.*;
+import com.sun.jdi.*;
 
 import java.util.Map;
 
@@ -14,36 +12,36 @@ public class ValueToCode {
         if (value == null) {
             return null;
         }
-        if (value instanceof IntegerValueImpl) {
-            return String.valueOf(((IntegerValueImpl) value).value());
+        if (value instanceof IntegerValue) {
+            return String.valueOf(((IntegerValue) value).value());
         }
-        if (value instanceof DoubleValueImpl) {
-            return String.valueOf(((DoubleValueImpl) value).value());
+        if (value instanceof DoubleValue) {
+            return String.valueOf(((DoubleValue) value).value());
         }
-        if (value instanceof FloatValueImpl) {
-            return String.valueOf(((FloatValueImpl) value).value()) + "f";
+        if (value instanceof FloatValue) {
+            return String.valueOf(((FloatValue) value).value()) + "f";
         }
-        if (value instanceof ShortValueImpl) {
-            return String.valueOf(((ShortValueImpl) value).value());
+        if (value instanceof ShortValue) {
+            return String.valueOf(((ShortValue) value).value());
         }
-        if (value instanceof ByteValueImpl) {
-            return String.valueOf(((ByteValueImpl) value).value());
+        if (value instanceof ByteValue) {
+            return String.valueOf(((ByteValue) value).value());
         }
-        if (value instanceof LongValueImpl) {
-            return String.valueOf(((LongValueImpl) value).value()) + "l";
+        if (value instanceof LongValue) {
+            return String.valueOf(((LongValue) value).value()) + "l";
         }
-        if (value instanceof CharValueImpl) {
-            return "'" + String.valueOf(((CharValueImpl) value).value()) + "'";
+        if (value instanceof CharValue) {
+            return "'" + String.valueOf(((CharValue) value).value()) + "'";
         }
-        if (value instanceof BooleanValueImpl) {
-            return String.valueOf(((BooleanValueImpl) value).value());
+        if (value instanceof BooleanValue) {
+            return String.valueOf(((BooleanValue) value).value());
         }
-        if (value instanceof StringReferenceImpl) {
-            return "\"" + ((StringReferenceImpl) value).value() + "\"";
+        if (value instanceof StringReference) {
+            return "\"" + ((StringReference) value).value() + "\"";
         }
-        if (value instanceof ObjectReferenceImpl) {
-            ObjectReferenceImpl objectValue = (ObjectReferenceImpl) value;
-            String code = getCodeForObjectCreation(getClassTypeName((ClassTypeImpl) objectValue.type()));
+        if (value instanceof ObjectReference) {
+            ObjectReference objectValue = (ObjectReference) value;
+            String code = getCodeForObjectCreation(getClassTypeName((ClassType) objectValue.type()));
             code += getCodeForObjectFields(objectValue);
             return code;
         }
@@ -51,7 +49,7 @@ public class ValueToCode {
         throw new UnsupportedOperationException();
     }
 
-    private String getClassTypeName(ClassTypeImpl type) {
+    private String getClassTypeName(ClassType type) {
         return Iterables.getLast(Splitter.on(".").split(type.name()));
     }
 
@@ -59,17 +57,17 @@ public class ValueToCode {
         return String.format("%s %s = new %s();\n", typeName, toVarName(typeName), typeName);
     }
 
-    private String getCodeForObjectFields(ObjectReferenceImpl objectValue) {
-        ClassTypeImpl type = (ClassTypeImpl) objectValue.type();
-        String code = "";
+    private String getCodeForObjectFields(ObjectReference objectValue) {
+        ClassType type = (ClassType) objectValue.type();
+        StringBuilder codeBuilder = new StringBuilder();
         for (Map.Entry<Field, Value> fieldValueEntry : objectValue.getValues(type.fields()).entrySet()) {
-            code = getCodeForObjectField(type, fieldValueEntry);
+            codeBuilder.append(getCodeForObjectField(type, fieldValueEntry));
         }
-        return code;
+        return codeBuilder.toString();
     }
 
-    private String getCodeForObjectField(ClassTypeImpl type, Map.Entry<Field, Value> fieldValueEntry) {
-        if (fieldValueEntry.getValue() instanceof PrimitiveValueImpl || fieldValueEntry.getValue() instanceof StringReferenceImpl) {
+    private String getCodeForObjectField(ClassType type, Map.Entry<Field, Value> fieldValueEntry) {
+        if (fieldValueEntry.getValue() instanceof PrimitiveValue || fieldValueEntry.getValue() instanceof StringReference) {
             return String.format("%s.%s(%s);\n",
                     toVarName(getClassTypeName(type)),
                     toSetterName(fieldValueEntry),

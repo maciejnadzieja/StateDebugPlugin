@@ -1,6 +1,6 @@
 package pl.statedebug;
 
-import com.sun.tools.jdi.*;
+import com.sun.jdi.*;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -15,7 +15,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertIntegerValue() {
-        IntegerValueImpl integerValue = mock(IntegerValueImpl.class);
+        IntegerValue integerValue = mock(IntegerValue.class);
         when(integerValue.value()).thenReturn(123);
 
         assertThat(new ValueToCode().convert(integerValue)).isEqualTo("123");
@@ -23,7 +23,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertDoubleValue() {
-        DoubleValueImpl doubleValue = mock(DoubleValueImpl.class);
+        DoubleValue doubleValue = mock(DoubleValue.class);
         when(doubleValue.value()).thenReturn(1.1);
 
         assertThat(new ValueToCode().convert(doubleValue)).isEqualTo("1.1");
@@ -31,7 +31,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertBooleanTrueValue() {
-        BooleanValueImpl booleanValue = mock(BooleanValueImpl.class);
+        BooleanValue booleanValue = mock(BooleanValue.class);
         when(booleanValue.value()).thenReturn(true);
 
         assertThat(new ValueToCode().convert(booleanValue)).isEqualTo("true");
@@ -39,7 +39,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertBooleanFalseValue() {
-        BooleanValueImpl booleanValue = mock(BooleanValueImpl.class);
+        BooleanValue booleanValue = mock(BooleanValue.class);
         when(booleanValue.value()).thenReturn(false);
 
         assertThat(new ValueToCode().convert(booleanValue)).isEqualTo("false");
@@ -47,7 +47,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertByteValue() {
-        ByteValueImpl byteValue = mock(ByteValueImpl.class);
+        ByteValue byteValue = mock(ByteValue.class);
         when(byteValue.value()).thenReturn(new Byte("11"));
 
         assertThat(new ValueToCode().convert(byteValue)).isEqualTo("11");
@@ -55,7 +55,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertCharValue() {
-        CharValueImpl charValue = mock(CharValueImpl.class);
+        CharValue charValue = mock(CharValue.class);
         when(charValue.value()).thenReturn('c');
 
         assertThat(new ValueToCode().convert(charValue)).isEqualTo("'c'");
@@ -63,7 +63,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertFloatValue() {
-        FloatValueImpl floatValue = mock(FloatValueImpl.class);
+        FloatValue floatValue = mock(FloatValue.class);
         when(floatValue.value()).thenReturn(123.45f);
 
         assertThat(new ValueToCode().convert(floatValue)).isEqualTo("123.45f");
@@ -71,7 +71,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertLongValue() {
-        LongValueImpl longValue = mock(LongValueImpl.class);
+        LongValue longValue = mock(LongValue.class);
         when(longValue.value()).thenReturn(2348576l);
 
         assertThat(new ValueToCode().convert(longValue)).isEqualTo("2348576l");
@@ -79,7 +79,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertStringValue() {
-        StringReferenceImpl stringReference = mock(StringReferenceImpl.class);
+        StringReference stringReference = mock(StringReference.class);
         when(stringReference.value()).thenReturn("some string");
 
         assertThat(new ValueToCode().convert(stringReference)).isEqualTo("\"some string\"");
@@ -87,7 +87,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertShortValue() {
-        ShortValueImpl shortValue = mock(ShortValueImpl.class);
+        ShortValue shortValue = mock(ShortValue.class);
         when(shortValue.value()).thenReturn(new Short("44"));
 
         assertThat(new ValueToCode().convert(shortValue)).isEqualTo("44");
@@ -95,7 +95,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertClassWithIntegerField() {
-        ObjectReferenceImpl objectValue = new ObjectReferenceBuilder()
+        ObjectReference objectValue = new ObjectReferenceBuilder()
                 .ofType("pl.statedebug.Foo")
                 .withIntegerField("intVal", 123)
                 .build();
@@ -108,7 +108,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertClassWithStringField() {
-        ObjectReferenceImpl objectValue = new ObjectReferenceBuilder()
+        ObjectReference objectValue = new ObjectReferenceBuilder()
                 .ofType("pl.statedebug.Foo")
                 .withStringField("stringField", "string value")
                 .build();
@@ -121,7 +121,7 @@ public class ValueToCodeTest {
 
     @Test
     public void shouldConvertClassWithObjectField() {
-        ObjectReferenceImpl objectValue = new ObjectReferenceBuilder()
+        ObjectReference objectValue = new ObjectReferenceBuilder()
                 .ofType("pl.statedebug.Foo")
                 .withObjectField(
                         "bar",
