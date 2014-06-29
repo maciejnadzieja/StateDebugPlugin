@@ -1,0 +1,3 @@
+#don't want to track idea files, this should be local stuff
+.idea/
+out/
